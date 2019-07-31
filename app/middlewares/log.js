@@ -38,9 +38,10 @@ function prepareSQL(sql, sqlType) {
     }
 
     if (Array.isArray(sql)) {
+        const lengthPerQuery = MAX_SQL_LENGTH / sql.length;
         return {
             type: sqlType,
-            sql: sql.map(q => ensureMaxQueryLength(q))
+            sql: sql.map(q => ensureMaxQueryLength(q, lengthPerQuery))
         };
     }
 
@@ -88,6 +89,6 @@ function prepareBatchFallbackQuery(sql) {
     return fallbackQuery;
 }
 
-function ensureMaxQueryLength(sql) {
-    return sql.substring(0, MAX_SQL_LENGTH);
+function ensureMaxQueryLength(sql, length = MAX_SQL_LENGTH) {
+    return sql.substring(0, length);
 }
